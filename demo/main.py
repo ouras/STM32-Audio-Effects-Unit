@@ -49,6 +49,7 @@ class Ui(QtWidgets.QMainWindow):
         ax.plot(self.input_signal.tolist(), label="input")
         ax.plot(self.output_signal.tolist(), label="output")
         ax.legend()
+        plt.setp(ax.get_xticklabels(), rotation=30, horizontalalignment='right', fontsize='x-small')
 
         self.canvas.draw()
 
