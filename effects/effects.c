@@ -51,7 +51,7 @@ void buf_overdrive(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples
 		// Saturate the input of tanh to avoid overflow
 		output = (int32_t) level * q_tanh(saturate_amplitude((int32_t) tone * input, INT16_MAX));
 		output = (int32_t) gain * ((int32_t) wet_amount * output >> FIXED_POINT_Q) >> FIXED_POINT_Q;
-		output = output + ((int32_t) dry_amount * input >> FIXED_POINT_Q);
+		output += (int32_t) dry_amount * input;
 
 		out_buf[n] = (int16_t) (output >> FIXED_POINT_Q) + X_AXIS;
 	}
