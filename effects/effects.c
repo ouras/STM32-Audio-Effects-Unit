@@ -8,6 +8,9 @@
 int32_t saturate_amplitude(int32_t num, size_t max);
 int32_t saturate_min(int32_t num, int32_t min);
 
+#define PARAM_INSTANCE_ENABLE	// Enables instances of parameters
+
+#ifdef PARAM_INSTANCE_ENABLE
 volatile overdrive_param overdrive = {
 	.level = MAX_OVERDRIVE_LEVEL,
     .gain = MAX_OVERDRIVE_GAIN,
@@ -24,6 +27,7 @@ volatile echo_param echo = {
 volatile compression_param compression = {
 	.threshold = MAX_COMPRESSION_THRESHOLD,
 	.ratio = MAX_COMPRESSION_RATIO };
+#endif
 
 /* Buffered overdrive/distortion:
  *	- Distortion/overdrive clips input signal to a threshold, which makes it resemble a square wave
@@ -38,14 +42,14 @@ void buf_overdrive(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples
 
 	for (size_t n = 0; n < num_samples; n++)
 	{
-		int32_t input = (in_buf[n] - X_AXIS) << FIXED_POINT_Q;
+		int32_t input = (int32_t) in_buf[n] - X_AXIS;
 		int32_t output;
 
 		size_t wet_amount = mix;
 		size_t dry_amount = (1U << FIXED_POINT_Q) - mix;
 
 		// Saturate the input of tanh to avoid overflow
-		output = (int32_t) level * q_tanh(saturate_amplitude((int32_t) tone * input >> FIXED_POINT_Q, INT16_MAX));
+		output = (int32_t) level * q_tanh(saturate_amplitude((int32_t) tone * input, INT16_MAX));
 		output = (int32_t) gain * ((int32_t) wet_amount * output >> FIXED_POINT_Q) >> FIXED_POINT_Q;
 		output = output + ((int32_t) dry_amount * input >> FIXED_POINT_Q);
 
