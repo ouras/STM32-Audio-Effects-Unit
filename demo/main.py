@@ -15,8 +15,8 @@ class Ui(QtWidgets.QMainWindow):
         super(Ui, self).__init__()
         self.ui = uic.loadUi('demo.ui', self)
 
-        self.input_signal = np.zeros(2, dtype=np.int32)
-        self.output_signal = np.zeros(2, dtype=np.int32)
+        self.input_signal = np.zeros(2)
+        self.output_signal = np.zeros(2)
 
         self.sample_rate = 0
 
@@ -56,8 +56,8 @@ class Ui(QtWidgets.QMainWindow):
     def reset_handler(self):
         print("Resetting...")
         sd.stop()
-        self.input_signal = np.zeros(2, dtype=np.int32)
-        self.output_signal = np.zeros(2, dtype=np.int32)
+        self.input_signal = np.zeros(2)
+        self.output_signal = np.zeros(2)
         self.plot()
 
     def add_signals_handler(self):
@@ -111,12 +111,6 @@ class Ui(QtWidgets.QMainWindow):
             else:
                 self.input_signal.resize(noise.shape)
             self.input_signal += noise
-
-        if self.ui.gainEnabledCheckBox.isChecked():
-            print("Adding gain...")
-            gain = self.ui.gainStageDoubleSpinBox.value()
-            temp = self.input_signal.astype(np.float64) * gain
-            self.input_signal = temp.astype(np.int32)
 
         self.output_signal = np.zeros(self.input_signal.shape)
 
@@ -189,12 +183,11 @@ class Ui(QtWidgets.QMainWindow):
     def open_file_handler(self):
         file_name, _filter = QtWidgets.QFileDialog.getOpenFileName(self, "Open audio file", ".", "Audio files (*.wav)")
 
-        if file_name:
+        if file_name is not None:
             file = wave.open(file_name)
             samples = file.getnframes()
             audio = file.readframes(samples)
-            self.input_signal = np.frombuffer(audio, dtype=np.int16).astype(np.int32)
-            self.output_signal = np.zeros(self.input_signal.shape, dtype=np.int32)
+            self.input_signal = np.frombuffer(audio, dtype=np.int16)
             self.plot()
 
 
