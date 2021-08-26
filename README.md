@@ -5,7 +5,7 @@
 Audio effects unit designed for STM32. Includes:
 - Library of effects implemented in C (including distortion/overdrive, reverb/echo, and compression)
 - Python GUI demo/testbench for effects (based on PyQt, PyPlot, NumPy, and ctypes)
-- PCB layout based on STM32F3RETx
+- PCB layout based on STM32F3RETx (plus LTSpice files)
 - CubeMX file for board (including FreeRTOS, peripheral, and pin configuration)
 - main.c (FreeRTOS-based firmware)
 
@@ -22,7 +22,7 @@ Board includes:
 - 3 buttons
 - 3 switches
 - EEPROM (for user configuration backups)
-- Input and output active gain and noise filter networks
+- Input and output active gain and noise filter networks (with LTSpice files)
 - 9V DC wall adapter, 9V battery, and 5V USB power support (converted to 3.3V)
 - Status and power LEDs
 
