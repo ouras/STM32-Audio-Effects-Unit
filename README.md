@@ -4,6 +4,7 @@
 
 Audio effects unit designed for STM32. Includes:
 - Library of effects implemented in C (including distortion/overdrive, reverb/echo, and compression)
+- Python GUI demo/testbench for effects (based on PyQt, PyPlot, NumPy, and ctypes)
 - PCB layout based on STM32F3RETx
 - CubeMX file for board (including FreeRTOS, peripheral, and pin configuration)
 - main.c (FreeRTOS-based firmware)
