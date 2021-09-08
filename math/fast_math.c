@@ -5,6 +5,7 @@
 
 #define TANH_CLAMP_POINT ((int16_t) (2.9858 * pow(2, FIXED_POINT_Q)))   // Point where tanh gets clamped to 1.0 in QA (should be where the error is lower than approximating)
 
+/*
 int16_t bam_sin(bam_t x)
 {
     // sin(x) ~= x * ( (3 << q_P) - (4 * x * x >> r) ) >> s
@@ -24,6 +25,7 @@ int16_t bam_sin(bam_t x)
 
     return (int32_t) -x * ( (3L << q_P) - ((int32_t) x * x >> r) ) >> s;
 }
+*/
 
 int16_t q_tanh(int16_t x)
 {
@@ -31,7 +33,7 @@ int16_t q_tanh(int16_t x)
     // Uses finite Lamber's series to 4 divisions (before simplification)
 
     if (x < -TANH_CLAMP_POINT) 
-        return (-1 << FIXED_POINT_Q);
+        return -(1 << FIXED_POINT_Q);
 
     if (x > TANH_CLAMP_POINT)
         return (1 << FIXED_POINT_Q);
