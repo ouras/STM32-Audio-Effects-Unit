@@ -8,23 +8,23 @@
 int32_t saturate_amplitude(int32_t num, size_t max);
 int32_t saturate_min(int32_t num, int32_t min);
 
-#define PARAM_INSTANCE_ENABLE	// Enables instances of parameters
+//#define PARAM_INSTANCE_ENABLE	// Enables instances of parameters
 
 #ifdef PARAM_INSTANCE_ENABLE
-volatile overdrive_param overdrive = {
+volatile OverdriveParam overdrive = {
 	.level = MAX_OVERDRIVE_LEVEL,
-    .gain = MAX_OVERDRIVE_GAIN,
-    .tone = MAX_OVERDRIVE_TONE,
+	.gain = MAX_OVERDRIVE_GAIN,
+	.tone = MAX_OVERDRIVE_TONE,
 	.mix = MAX_OVERDRIVE_MIX };
 
-volatile echo_param echo = {
+volatile EchoParam echo = {
 	.delay_samples = MAX_ECHO_DELAY_SAMPLES,
 	.pre_delay = MIN_ECHO_PRE_DELAY,
 	.density = MAX_ECHO_DENSITY,
 	.attack = MAX_ECHO_ATTACK,
 	.decay = MAX_ECHO_DECAY };
 
-volatile compression_param compression = {
+volatile CompressionParam compression = {
 	.threshold = MAX_COMPRESSION_THRESHOLD,
 	.ratio = MAX_COMPRESSION_RATIO };
 #endif
@@ -33,10 +33,10 @@ volatile compression_param compression = {
  *	- Distortion/overdrive clips input signal to a threshold, which makes it resemble a square wave
  *	- Uses tanh of input
  */
-void buf_overdrive(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples, const overdrive_param* param)
+void buf_overdrive(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples, const OverdriveParam* param)
 {
 	size_t level = param->level;
-    size_t gain = param->gain;
+	size_t gain = param->gain;
 	size_t tone = param->tone;
 	size_t mix = param->mix;
 
@@ -62,13 +62,13 @@ void buf_overdrive(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples
  *  - Note: num_samples is the size of out_buf
  *  - Note: in_buf is assumed to have delay_samples of previous samples, plus num_samples of current samples (those to which to add echo)
  */
-void buf_echo(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples, const echo_param* param)
+void buf_echo(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples, const EchoParam* param)
 {
 	size_t delay_samples = param->delay_samples;
 	size_t pre_delay = param->pre_delay;
-    size_t density = param->density;
-    size_t attack = param->attack;
-    size_t decay = param->decay;
+	size_t density = param->density;
+	size_t attack = param->attack;
+	size_t decay = param->decay;
 	
 	// Start of current samples of in_buf
 	const uint16_t* in_buf_curr = &in_buf[delay_samples];
@@ -106,10 +106,10 @@ void buf_echo(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples, con
  *	- Reduces signal above threshold based on ratio
  * 	- Ratio is in QN
  */
-void buf_compression(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples, const compression_param* param)
+void buf_compression(const uint16_t* in_buf, uint16_t* out_buf, size_t num_samples, const CompressionParam* param)
 {
 	size_t threshold = param->threshold;
-    size_t ratio = param->ratio;
+	size_t ratio = param->ratio;
 	
 	// Excess gets scaled by (1 - ratio) before being added back to threshold
 	ratio = (1L << FIXED_POINT_Q) - ratio;
