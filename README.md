@@ -38,10 +38,10 @@ Running the demo:
 2. Install the required modules (at the top of effects.py and main.py)
 3. Copy the contents of /math and /effects to the folder from step 1.
 4. Compile the C source files using:
-  a. gcc -Wall -c fast_math.c effects.c
+  1. gcc -Wall -c fast_math.c effects.c
 5. Create the shared library using:
-  a. gcc -shared -o libeffects.dll \*.o
-  b. Add “-m64” if using 64-bit Python
-  6. Run main.py
+  1. gcc -shared -o libeffects.dll \*.o
+  2. Add “-m64” if using 64-bit Python
+  3. Run main.py
 
 A working document for this project (which include requirements, milestones, and technical notes) can be found [here](https://docs.google.com/document/d/13bzRhMHOJ_USe95iWY26JIxKYx1gLJ1tkpusW1AXwGo/edit?usp=sharing).
